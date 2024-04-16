@@ -94,7 +94,7 @@ function MojKomponent() {
 
   return (
     <div>
-      <h4>Automaticky kurz</h4>
+      <h4>Automaticky</h4>
       <form onSubmit={handleSubmit}>
         <label>
           Meno:
