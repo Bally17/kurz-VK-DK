@@ -1,5 +1,4 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
 const Graf = ({ data }) => {
   return (
@@ -14,7 +13,7 @@ const Graf = ({ data }) => {
         <Line type="monotone" dataKey="DK" stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>
-  );
+  )
 }
 
-export default Graf;
+export default Graf

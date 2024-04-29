@@ -25,15 +25,13 @@ function Automatic() {
   }, [totalMoney, oldMoney, kurz])
 
   useEffect(() => {
-    // Načítanie údajov z Local Storage pri načítaní komponenty
-    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdajeDva'));
-    if (storedUdaje) setOdoslaneUdajeDva(storedUdaje);
-  }, []);
+    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdajeDva'))
+    if (storedUdaje) setOdoslaneUdajeDva(storedUdaje)
+  }, [])
 
   useEffect(() => {
-    // Uloženie údajov do Local Storage pri zmene
-    localStorage.setItem('odoslaneUdajeDva', JSON.stringify(odoslaneUdajeDva));
-  }, [odoslaneUdajeDva]);
+    localStorage.setItem('odoslaneUdajeDva', JSON.stringify(odoslaneUdajeDva))
+  }, [odoslaneUdajeDva])
 
   const handleMenoChange = (event) => {
     setMeno(event.target.value)

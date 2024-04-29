@@ -10,15 +10,13 @@ function Manual() {
   const [subtractValue, setSubtractValue] = useState([])
   
   useEffect(() => {
-    // Načítanie údajov z Local Storage pri načítaní komponenty
-    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdaje'));
-    if (storedUdaje) setOdoslaneUdaje(storedUdaje);
-  }, []);
+    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdaje'))
+    if (storedUdaje) setOdoslaneUdaje(storedUdaje)
+  }, [])
 
   useEffect(() => {
-    // Uloženie údajov do Local Storage pri zmene
-    localStorage.setItem('odoslaneUdaje', JSON.stringify(odoslaneUdaje));
-  }, [odoslaneUdaje]);
+    localStorage.setItem('odoslaneUdaje', JSON.stringify(odoslaneUdaje))
+  }, [odoslaneUdaje])
 
   const handleMenoChange = (event) => {
     setMeno(event.target.value)
@@ -59,7 +57,7 @@ function Manual() {
       updatedUdaje[index].VK += parseFloat(inputValues[index] || 0)
       updatedUdaje[index].peniaze = updatedUdaje[index].VK * 1000
       setInputValues((prevInputValues) => {
-        const newInputValues = [...prevInputValues];
+        const newInputValues = [...prevInputValues]
         newInputValues[index] = ''
         return newInputValues
       })

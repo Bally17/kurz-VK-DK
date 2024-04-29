@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Graf from './graf'
 
 const DataSupplier = ({ udaje }) => {
@@ -22,14 +22,14 @@ const DataSupplier = ({ udaje }) => {
                 name: name,
                 VK: vkSum,
                 DK: dkSum,
-            });
+            })
         }
 
         grafData.unshift({
             name: 'Začiatok',
             VK: 0,
             DK: 0,
-        });
+        })
 
         setData(grafData)
     }, [udaje])
@@ -38,6 +38,6 @@ const DataSupplier = ({ udaje }) => {
         <p>aktualne je {data.length > 0 ? data[data.length - 1].VK.toFixed(2) : 0} VK a {data.length > 0 ? data[data.length - 1].DK.toFixed(2) : 0} DK.</p>
         <Graf data={data} />
     </>
-};
+}
 
 export default DataSupplier
