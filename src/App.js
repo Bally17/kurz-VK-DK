@@ -1,6 +1,6 @@
 import {useState} from 'react'
-import First from './components/first'
-import Second from './components/second'
+import Manual from './components/manual'
+import Automatic from './components/automatic'
 
 const App = () => {
   const [title, setTitle] = useState('klik na automaticky kurz')
@@ -18,7 +18,7 @@ const App = () => {
   return <>
     <button type="button" onClick={clickBtn}>{title}</button>
     <p></p>
-    {show ? (<First />) : (<Second />)}
+    {show ? (<Manual />) : (<Automatic />)}
   </>
 }
 

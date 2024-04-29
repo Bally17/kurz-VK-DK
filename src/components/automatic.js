@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
+import DataSupplier from './dataSupplier'
 
-function MojKomponent() {
+function Automatic() {
   const [meno, setMeno] = useState('')
   const [peniaze, setPeniaze] = useState('')
-  const [odoslaneUdaje, setOdoslaneUdaje] = useState([])
+  const [odoslaneUdajeDva, setOdoslaneUdajeDva] = useState([])
   const [inputValues, setInputValues] = useState([])
   const [subtractValue, setSubtractValue] = useState([])
   const [totalMoney, setTotalMoney] = useState(0)
@@ -11,17 +12,28 @@ function MojKomponent() {
   const [kurz, setKurz] = useState(1)
 
   useEffect(() => {
-    const sum = odoslaneUdaje.reduce((total, udaj) => total + parseFloat(udaj.peniaze || 0), 0)
+    const sum = odoslaneUdajeDva.reduce((total, udaj) => total + parseFloat(udaj.peniaze || 0), 0)
     setTotalMoney(sum)
-  }, [odoslaneUdaje])
+  }, [odoslaneUdajeDva])
 
   useEffect(() => {
     if (totalMoney !== 0) {
-      const newKurz = kurz * Math.E**(-0.05*((oldMoney / totalMoney) -1 ))
+      const newKurz = kurz / Math.E**(-0.05*((oldMoney / totalMoney) -1 ))
       setKurz(newKurz)
         setOldMoney(totalMoney)
     }
   }, [totalMoney, oldMoney, kurz])
+
+  useEffect(() => {
+    // Načítanie údajov z Local Storage pri načítaní komponenty
+    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdajeDva'));
+    if (storedUdaje) setOdoslaneUdajeDva(storedUdaje);
+  }, []);
+
+  useEffect(() => {
+    // Uloženie údajov do Local Storage pri zmene
+    localStorage.setItem('odoslaneUdajeDva', JSON.stringify(odoslaneUdajeDva));
+  }, [odoslaneUdajeDva]);
 
   const handleMenoChange = (event) => {
     setMeno(event.target.value)
@@ -35,7 +47,7 @@ function MojKomponent() {
   }
 
   const handleConvertToDK = (index) => {
-    setOdoslaneUdaje((prevOdoslaneUdaje) => {
+    setOdoslaneUdajeDva((prevOdoslaneUdaje) => {
       const updatedUdaje = [...prevOdoslaneUdaje]
       updatedUdaje[index].DK += updatedUdaje[index].VK * kurz
       updatedUdaje[index].VK = 0
@@ -45,7 +57,7 @@ function MojKomponent() {
   }
 
   const handleConvertToVK = (index) => {
-    setOdoslaneUdaje((prevOdoslaneUdaje) => {
+    setOdoslaneUdajeDva((prevOdoslaneUdaje) => {
       const updatedUdaje = [...prevOdoslaneUdaje]
       updatedUdaje[index].VK += updatedUdaje[index].DK / kurz
       updatedUdaje[index].DK = 0
@@ -55,7 +67,7 @@ function MojKomponent() {
   }
 
   const handleSubmitVKValue = (index) => {
-    setOdoslaneUdaje((prevOdoslaneUdaje) => {
+    setOdoslaneUdajeDva((prevOdoslaneUdaje) => {
       const updatedUdaje = [...prevOdoslaneUdaje]
       updatedUdaje[index].VK += parseFloat(inputValues[index] || 0)
       updatedUdaje[index].peniaze = updatedUdaje[index].VK * 1000
@@ -69,7 +81,7 @@ function MojKomponent() {
   }
 
   const handleSubtractFromVK = (index) => {
-    setOdoslaneUdaje((prevOdoslaneUdaje) => {
+    setOdoslaneUdajeDva((prevOdoslaneUdaje) => {
       const updatedUdaje = [...prevOdoslaneUdaje]
       const subtract = parseFloat(subtractValue[index] || 0)
       updatedUdaje[index].VK = Math.max(updatedUdaje[index].VK - subtract, 0)
@@ -86,7 +98,7 @@ function MojKomponent() {
   const handleSubmit = (event) => {
     event.preventDefault()
     const novaPolozka = { meno, peniaze, VK: peniaze / 1000, DK: 0 }
-    setOdoslaneUdaje([...odoslaneUdaje, novaPolozka])
+    setOdoslaneUdajeDva([...odoslaneUdajeDva, novaPolozka])
     setMeno('')
     setPeniaze('')
     setInputValues([...inputValues, ''])
@@ -94,7 +106,7 @@ function MojKomponent() {
 
   return (
     <div>
-      <h4>Automaticky</h4>
+      <h4>Automaticky kurz</h4>
       <form onSubmit={handleSubmit}>
         <label>
           Meno:
@@ -107,9 +119,9 @@ function MojKomponent() {
         <button type="submit">Odoslať</button>
       </form>
       <p>Daný kurz je 1 : {kurz.toFixed(2)}</p>
-      <button type="button" onClick={() => setOdoslaneUdaje([])}>vymazat list</button>
+      <button type="button" onClick={() => {setOdoslaneUdajeDva([]); setKurz(1)}}>vymazat list</button>
       <div>
-        {odoslaneUdaje.map((udaj, index) => (
+        {odoslaneUdajeDva.map((udaj, index) => (
           <div key={index}>
             <p>Meno: {udaj.meno}</p>
             <p>Peniaze: {parseFloat(udaj.peniaze).toFixed(2)}</p>
@@ -152,8 +164,9 @@ function MojKomponent() {
           </div>
         ))}
       </div>
+      <DataSupplier udaje={odoslaneUdajeDva} />
     </div>
   )
 }
 
-export default MojKomponent
+export default Automatic

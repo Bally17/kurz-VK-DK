@@ -1,12 +1,24 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import DataSupplier from './dataSupplier'
 
-function MojKomponent() {
+function Manual() {
   const [meno, setMeno] = useState('')
   const [peniaze, setPeniaze] = useState('')
   const [odoslaneUdaje, setOdoslaneUdaje] = useState([])
   const [kurz, setKurz] = useState(1)
   const [inputValues, setInputValues] = useState([])
   const [subtractValue, setSubtractValue] = useState([])
+  
+  useEffect(() => {
+    // Načítanie údajov z Local Storage pri načítaní komponenty
+    const storedUdaje = JSON.parse(localStorage.getItem('odoslaneUdaje'));
+    if (storedUdaje) setOdoslaneUdaje(storedUdaje);
+  }, []);
+
+  useEffect(() => {
+    // Uloženie údajov do Local Storage pri zmene
+    localStorage.setItem('odoslaneUdaje', JSON.stringify(odoslaneUdaje));
+  }, [odoslaneUdaje]);
 
   const handleMenoChange = (event) => {
     setMeno(event.target.value)
@@ -146,8 +158,9 @@ function MojKomponent() {
           </div>
         ))}
       </div>
+      <DataSupplier udaje={odoslaneUdaje} />
     </div>
   )
 }
 
-export default MojKomponent
+export default Manual
